@@ -5,19 +5,34 @@
     android:id="@+id/navigation"
     app:startDestination="@id/splashFragment">
 
+<!--    Splash screen fragment   -->
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.angad.binkitclone.SplashFragment"
+        android:name="com.angad.binkitclone.auth.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" />
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_signInFragment"
+            app:destination="@id/signInFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+<!--    SignIn screen fragment  -->
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.angad.binkitclone.SignInFragment"
+        android:name="com.angad.binkitclone.auth.SignInFragment"
         android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_sign_in" />
+        tools:layout="@layout/fragment_sign_in" >
+        <action
+            android:id="@+id/action_signInFragment_to_OTPFragment"
+            app:destination="@id/OTPFragment" />
+    </fragment>
+
+<!--    OTP screen fragment  -->
     <fragment
         android:id="@+id/OTPFragment"
-        android:name="com.angad.binkitclone.OTPFragment"
+        android:name="com.angad.binkitclone.auth.OTPFragment"
         android:label="fragment_o_t_p"
         tools:layout="@layout/fragment_o_t_p" />
 </navigation>
