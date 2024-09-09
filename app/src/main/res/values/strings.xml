@@ -7,4 +7,7 @@
     <string name="login">Login or sign up</string>
     <string name="tagLine">India\'s last minute app</string>
     <string name="signImg">signInImg</string>
+    <string name="OTP_text">We have sent a verification code to</string>
+    <string name="codeNo">+91</string>
+    <string name="loginBtn">Login</string>
 </resources>
