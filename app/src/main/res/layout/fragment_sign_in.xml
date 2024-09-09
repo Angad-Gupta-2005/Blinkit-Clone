@@ -22,6 +22,7 @@
             android:id="@+id/ivLoginImage"
             android:layout_width="@dimen/_320sdp"
             android:layout_height="@dimen/_300sdp"
+            android:contentDescription="@string/signImg"
             android:scaleType="centerCrop"
             android:src="@drawable/image_prod"/>
 
@@ -31,7 +32,8 @@
             android:layout_height="@dimen/_50sdp"
             android:layout_gravity="center"
             android:layout_marginTop="13dp"
-            android:src="@drawable/app_icon"/>
+            android:src="@drawable/app_icon"
+            android:contentDescription="@string/app_name"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -39,7 +41,7 @@
             android:layout_gravity="center"
             android:textColor="@color/black"
             android:layout_marginTop="15dp"
-            android:text="India's last minute app"
+            android:text="@string/tagLine"
             android:textStyle="bold"
             android:textSize="22sp"/>
 
@@ -47,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Login or sign up"
+            android:text="@string/login"
             android:textColor="@color/black"
             android:textSize="17sp"/>
 
@@ -69,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:drawableStart = "@drawable/ic_phone"
                 android:drawablePadding = "10dp"
-                android:hint="Enter mobile number"
+                android:hint="@string/mob_number"
                 android:inputType = "number"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -83,7 +85,7 @@
             android:layout_marginHorizontal="26dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="#8d99ae"
-            android:text="Continue"
+            android:text="@string/continueBtn"
             android:textColor="#FFFFFF"
             android:textAllCaps="false"
             android:textSize="18sp"
