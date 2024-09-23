@@ -51,6 +51,7 @@ class SignInFragment : Fragment() {
         }
     }
 
+//    function to change the button color if user enter a valid user number
     private fun getUserNumber() {
         binding.etUserNumber.addTextChangedListener( object: TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -75,6 +76,7 @@ class SignInFragment : Fragment() {
         } )
     }
 
+//    Function to set the background color of status bar
     private fun setStatusBarColor(){
         activity?.window?.apply{
             val statusBarColors = ContextCompat.getColor(requireContext(), R.color.yellow)
