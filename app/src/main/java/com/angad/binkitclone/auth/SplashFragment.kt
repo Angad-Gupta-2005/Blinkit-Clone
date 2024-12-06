@@ -1,5 +1,6 @@
 package com.angad.binkitclone.auth
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -9,18 +10,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.angad.binkitclone.R
+import com.angad.binkitclone.activity.UsersMainActivity
 import com.angad.binkitclone.databinding.FragmentSplashBinding
+import com.angad.binkitclone.viewmodels.AuthViewModel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class SplashFragment : Fragment() {
+
+    //    Initialised the viewModel
+    private val viewModel: AuthViewModel by viewModels()
 
     private lateinit var binding: FragmentSplashBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = FragmentSplashBinding.inflate( layoutInflater)
 
@@ -29,7 +39,16 @@ class SplashFragment : Fragment() {
 
 //        Use of Handler for splash screen
         Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(R.id.action_splashFragment_to_signInFragment)
+            lifecycleScope.launch {
+                viewModel.isCurrentUser.collect{
+                    if (it){
+                        startActivity(Intent(requireActivity(), UsersMainActivity::class.java))
+                        requireActivity().finish()
+                    } else{
+                        findNavController().navigate(R.id.action_splashFragment_to_signInFragment)
+                    }
+                }
+            }
         }, 2000)
         return binding.root
     }

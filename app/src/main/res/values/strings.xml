@@ -11,4 +11,7 @@
     <string name="codeNo">+91 </string>
     <string name="loginBtn">Login</string>
     <string name="loading">Loading....</string>
+    <string name="profile_image">Profile Image</string>
+    <string name="category_image">Category Image</string>
+    <string name="category_title">Vegetables and Fruits</string>
 </resources>

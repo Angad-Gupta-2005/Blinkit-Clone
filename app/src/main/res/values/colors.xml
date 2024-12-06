@@ -8,4 +8,6 @@
     <color name="grayish_blue">#8d99ae</color>
     <color name="blue">#0851D0</color>
     <color name="white_yellow">#FFFFFFFF</color>
+    <color name="orange">#E0551E</color>
+    <color name="light_blue">#A6C3F6</color>
 </resources>
