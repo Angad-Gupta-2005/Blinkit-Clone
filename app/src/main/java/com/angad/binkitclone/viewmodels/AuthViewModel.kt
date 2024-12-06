@@ -1,12 +1,15 @@
 package com.angad.binkitclone.viewmodels
 
 import android.app.Activity
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.angad.binkitclone.Utils
+import com.angad.binkitclone.models.Users
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.concurrent.TimeUnit
 
@@ -50,12 +53,22 @@ class AuthViewModel: ViewModel() {
 
     }
 
-    fun signInWithPhoneAuthCredential(otp: String, userNumber: String) {
+    fun signInWithPhoneAuthCredential(otp: String, userNumber: String, user: Users) {
         val credential = PhoneAuthProvider.getCredential(_verificationId.value.toString(), otp)
         Utils.getAuthInstance().signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
+                //    Save the user data into the firebase realtime database
+                    FirebaseDatabase.getInstance("https://blinkit-clone-f610a-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("AllUsers").child("Users").child(user.uid!!).setValue(user)
+                        .addOnSuccessListener {
+                           // Toast.makeText( this, "Data save successfully", Toast.LENGTH_SHORT).show()
+                            Log.d("Success", "signInWithPhoneAuthCredential: ")
+                        }
+                        .addOnFailureListener { e ->
+                           // Toast.makeText(this, "Error ${e.message}", Toast.LENGTH_SHORT).show()
+                            Log.e("Unsuccessful", "signInWithPhoneAuthCredential: ${e.message}" )
+                        }
+                // Sign in success, update UI with the signed-in user's information
                     _isSignedInSuccessfully.value = true
                 } else {
                     // Sign in failed, display a message and update the UI

@@ -1,5 +1,6 @@
 package com.angad.binkitclone.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,7 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.angad.binkitclone.R
 import com.angad.binkitclone.Utils
+import com.angad.binkitclone.activity.UsersMainActivity
 import com.angad.binkitclone.databinding.FragmentOTPBinding
+import com.angad.binkitclone.models.Users
 import com.angad.binkitclone.viewmodels.AuthViewModel
 import kotlinx.coroutines.launch
 
@@ -22,7 +25,7 @@ class OTPFragment : Fragment() {
     private lateinit var binding: FragmentOTPBinding
     private lateinit var userNumber: String
 
-//    calling the function to send the OTP
+//    initialised the viewModel to send the OTP
     private val viewModel : AuthViewModel by viewModels()
 
     override fun onCreateView(
@@ -116,7 +119,8 @@ class OTPFragment : Fragment() {
     //    Functionality to perform action when Login button clicked
     private fun onLoginButtonClicked() {
         binding.btnLogin.setOnClickListener {
-            Toast.makeText(context, "Signing You...", Toast.LENGTH_SHORT).show()
+            Utils.showDialog(requireContext(), "Signing You...")
+        //    Toast.makeText(context, "Signing You...", Toast.LENGTH_SHORT).show()
             val editTexts = arrayOf(binding.etOtp1, binding.etOtp2, binding.etOtp3, binding.etOtp4, binding.etOtp5, binding.etOtp6)
             val otp = editTexts.joinToString(""){ it.text.toString() }
 
@@ -131,15 +135,20 @@ class OTPFragment : Fragment() {
         }
     }
 
-//    function to verify the otp entered by the user
+//    function to verify the otp entered by the user and after verification it goes to the home fragment
     private fun verifyOtp(otp: String) {
-        viewModel.signInWithPhoneAuthCredential(otp, userNumber)
+    //    Creating an instance of user class which available in models package
+        val user = Users( Utils.getCurrentUserId(), userNumber, null)
+
+        viewModel.signInWithPhoneAuthCredential(otp, userNumber, user)
 
         lifecycleScope.launch {
             viewModel.isSignedInSuccessfully.collect{
                 if (it){
                     Utils.hideDialog()
                     Toast.makeText(context, "Logged In...", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent( requireContext(), UsersMainActivity::class.java))
+                    requireActivity().finish()
                 }
             }
         }

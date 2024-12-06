@@ -30,7 +30,7 @@ class SplashFragment : Fragment() {
 //        Use of Handler for splash screen
         Handler(Looper.getMainLooper()).postDelayed({
             findNavController().navigate(R.id.action_splashFragment_to_signInFragment)
-        }, 3000)
+        }, 2000)
         return binding.root
     }
 

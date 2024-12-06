@@ -72,7 +72,8 @@
                 android:drawableStart = "@drawable/ic_phone"
                 android:drawablePadding = "10dp"
                 android:hint="@string/mob_number"
-                android:inputType = "number"/>
+                android:inputType = "number"
+                android:maxLength="10" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,7 +85,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="26dp"
             android:layout_marginTop="10dp"
-            android:backgroundTint="#8d99ae"
+            android:backgroundTint="@color/grayish_blue"
             android:text="@string/continueBtn"
             android:textColor="#FFFFFF"
             android:textAllCaps="false"
