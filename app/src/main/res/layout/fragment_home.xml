@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".HomeFragment">
+    tools:context=".fragments.HomeFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar"
@@ -59,11 +60,11 @@
                         android:layout_gravity="center"
                         android:background="@android:color/transparent"
                         android:drawablePadding="10dp"
-                        android:hint="Search"
+                        android:hint="@string/search"
                         android:padding="10dp"
                         android:textSize="@dimen/_15sdp"
                         android:textColorHint="@color/black"
-                        />
+                        app:drawableStartCompat="@drawable/ic_search" />
 
                 </com.google.android.material.card.MaterialCardView>
                 
@@ -96,7 +97,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
-                    android:text="Best Sellers"
+                    android:text="@string/best_sellers"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_14sdp"
                     android:textStyle="bold"/>
@@ -129,7 +130,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/_5sdp"
-                    android:text="Shop by Category"
+                    android:text="@string/shop_by_category"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_14sdp"
                     android:textStyle="bold"/>

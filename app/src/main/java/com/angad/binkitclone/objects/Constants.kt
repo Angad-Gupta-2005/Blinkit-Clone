@@ -1,4 +1,6 @@
-package com.angad.binkitclone
+package com.angad.binkitclone.objects
+
+import com.angad.binkitclone.R
 
 object Constants {
     val allProductsCategory = arrayOf(

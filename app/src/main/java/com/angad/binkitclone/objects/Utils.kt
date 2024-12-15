@@ -1,4 +1,4 @@
-package com.angad.binkitclone
+package com.angad.binkitclone.objects
 
 import android.content.Context
 import android.view.LayoutInflater

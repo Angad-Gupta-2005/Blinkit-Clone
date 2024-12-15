@@ -56,8 +56,8 @@ dependencies {
     implementation("com.intuit.ssp:ssp-android:1.1.0")
 
     // Navigation Component
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.4")
-    implementation("androidx.navigation:navigation-ui-ktx:2.8.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.8.5")
 
     //lifecycle
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
@@ -74,4 +74,10 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx")
     implementation("com.google.firebase:firebase-database-ktx")
     implementation("com.google.firebase:firebase-messaging-ktx:24.0.1")
+
+    //  Image slider dependency
+    implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
+
+    //shimmer effect
+    implementation("com.facebook.shimmer:shimmer:0.5.0@aar")
 }

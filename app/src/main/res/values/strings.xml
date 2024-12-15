@@ -14,4 +14,10 @@
     <string name="profile_image">Profile Image</string>
     <string name="category_image">Category Image</string>
     <string name="category_title">Vegetables and Fruits</string>
+    <string name="title">Nandini Toned Freash Milk alda aloie hbeh euhfoen oiefjf</string>
+    <string name="back_button">Back Button</string>
+    <string name="no_products_added_in_this_category">No products added in this category</string>
+    <string name="search">Search</string>
+    <string name="best_sellers">Best Sellers</string>
+    <string name="shop_by_category">Shop by Category</string>
 </resources>

@@ -3,7 +3,7 @@ package com.angad.binkitclone.viewmodels
 import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.angad.binkitclone.Utils
+import com.angad.binkitclone.objects.Utils
 import com.angad.binkitclone.models.Users
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.PhoneAuthCredential

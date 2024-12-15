@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.angad.binkitclone.R
-import com.angad.binkitclone.Utils
+import com.angad.binkitclone.objects.Utils
 import com.angad.binkitclone.activity.UsersMainActivity
 import com.angad.binkitclone.databinding.FragmentOTPBinding
 import com.angad.binkitclone.models.Users

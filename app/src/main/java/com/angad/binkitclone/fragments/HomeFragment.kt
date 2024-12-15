@@ -1,13 +1,16 @@
-package com.angad.binkitclone
+package com.angad.binkitclone.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.angad.binkitclone.R
 import com.angad.binkitclone.adapters.AdapterCategory
 import com.angad.binkitclone.databinding.FragmentHomeBinding
 import com.angad.binkitclone.models.Category
+import com.angad.binkitclone.objects.Constants
 
 class HomeFragment : Fragment() {
 
@@ -23,7 +26,16 @@ class HomeFragment : Fragment() {
 
     //    Calling the function that set all category
         setAllCategories()
+
+        navigatingToSearchFragment()
         return binding.root
+    }
+
+
+    private fun navigatingToSearchFragment() {
+        binding.searchEt.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        }
     }
 
     private fun setAllCategories() {
