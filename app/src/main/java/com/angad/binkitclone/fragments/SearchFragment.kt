@@ -1,6 +1,8 @@
-package com.angad.binkitclone
+package com.angad.binkitclone.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.angad.binkitclone.R
 import com.angad.binkitclone.adapters.AdapterProduct
 import com.angad.binkitclone.databinding.FragmentSearchBinding
 import com.angad.binkitclone.models.Product
@@ -35,8 +38,28 @@ class SearchFragment : Fragment() {
 
         backToHomeFragment()
 
+
+    //    Calling the function that implement the search functionality
+        searchProducts()
+
         return binding.root
     }
+
+//    Function the perform the search functionality
+    private fun searchProducts() {
+        binding.searchEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s.toString().trim()
+                adapterProduct.filter.filter(query)
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+
+        })
+    }
+
 
     private fun backToHomeFragment() {
         binding.backButton.setOnClickListener {
@@ -71,7 +94,7 @@ class SearchFragment : Fragment() {
                 adapterProduct.differ.submitList(it)
 
                 //    For search functionality
-              //  adapterProduct.originalProduct = it as ArrayList<Product>
+                adapterProduct.originalProduct = it as ArrayList<Product>
                 //    After loaded the data hide the shimmer effect
                 binding.shimmerViewContainer.visibility = View.GONE
             }

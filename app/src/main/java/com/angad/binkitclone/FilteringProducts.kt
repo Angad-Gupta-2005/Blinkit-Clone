@@ -6,8 +6,8 @@ import com.angad.binkitclone.models.Product
 import java.util.Locale
 
 class FilteringProducts(
-    val adapter: AdapterProduct,
-    val filter: ArrayList<Product>
+    private val adapter: AdapterProduct,
+    private val filter: ArrayList<Product>
 ): Filter() {
     override fun performFiltering(constraint: CharSequence?): FilterResults {
         val result = FilterResults()

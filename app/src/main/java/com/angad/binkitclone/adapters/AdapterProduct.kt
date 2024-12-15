@@ -13,8 +13,8 @@ import com.angad.binkitclone.databinding.ItemViewProductBinding
 import com.angad.binkitclone.models.Product
 import com.denzcoskun.imageslider.models.SlideModel
 
-class AdapterProduct()
-    : RecyclerView.Adapter<AdapterProduct.ProductViewHolder>() {
+class AdapterProduct
+    : RecyclerView.Adapter<AdapterProduct.ProductViewHolder>(), Filterable {
 
     class ProductViewHolder(val binding: ItemViewProductBinding):RecyclerView.ViewHolder(binding.root)
 
@@ -64,12 +64,12 @@ class AdapterProduct()
 
     }
 
-//    private val filter: FilteringProducts? = null
-//    var originalProduct = ArrayList<Product>()
-//    override fun getFilter(): Filter {
-//        if (filter == null){
-//            return FilteringProducts(this, originalProduct)
-//        }
-//        return filter
-//    }
+    private val filter: FilteringProducts? = null
+    var originalProduct = ArrayList<Product>()
+    override fun getFilter(): Filter {
+        if (filter == null){
+            return FilteringProducts(this, originalProduct)
+        }
+        return filter
+    }
 }
