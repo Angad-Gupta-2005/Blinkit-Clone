@@ -14,6 +14,10 @@
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/searchFragment"
             app:enterAnim="@anim/from_right" />
+        <action
+            android:id="@+id/action_homeFragment_to_categoryFragment"
+            app:destination="@id/categoryFragment"
+            app:enterAnim="@anim/from_right" />
     </fragment>
 
     <fragment
@@ -23,6 +27,21 @@
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_searchFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@anim/from_left"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoryFragment"
+        android:name="com.angad.binkitclone.fragments.CategoryFragment"
+        android:label="fragment_category"
+        tools:layout="@layout/fragment_category" >
+        <action
+            android:id="@+id/action_categoryFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_categoryFragment_to_homeFragment"
             app:destination="@id/homeFragment"
             app:enterAnim="@anim/from_left"
             app:popUpTo="@id/homeFragment"

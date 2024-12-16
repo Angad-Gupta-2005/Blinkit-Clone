@@ -45,7 +45,13 @@ class HomeFragment : Fragment() {
             categoryList.add(Category(Constants.allProductsCategory[i], Constants.allProductsCategoryIcon[i]))
         }
 
-        binding.rvCategories.adapter = AdapterCategory(categoryList)
+        binding.rvCategories.adapter = AdapterCategory(categoryList, ::onCategoryIconClicked)
+    }
+
+    private fun onCategoryIconClicked(category:Category){
+        val bundle = Bundle()
+        bundle.putString("category", category.title)
+        findNavController().navigate(R.id.action_homeFragment_to_categoryFragment, bundle)
     }
 
 }

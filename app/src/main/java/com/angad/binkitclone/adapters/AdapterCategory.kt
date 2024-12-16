@@ -6,13 +6,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.angad.binkitclone.databinding.ItemViewProductCategoryBinding
 import com.angad.binkitclone.models.Category
 
-class AdapterCategory(private val categoryList: ArrayList<Category>): RecyclerView.Adapter<AdapterCategory.CategoryViewHolder>() {
-    class CategoryViewHolder( val binding: ItemViewProductCategoryBinding):RecyclerView.ViewHolder(binding.root) {
+class AdapterCategory(
+    private val categoryList: ArrayList<Category>,
+    val onCategoryIconClicked: (Category) -> Unit
+) : RecyclerView.Adapter<AdapterCategory.CategoryViewHolder>() {
 
-    }
+    class CategoryViewHolder(val binding: ItemViewProductCategoryBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val view = ItemViewProductCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view = ItemViewProductCategoryBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return CategoryViewHolder(view)
     }
 
@@ -25,6 +31,11 @@ class AdapterCategory(private val categoryList: ArrayList<Category>): RecyclerVi
         holder.binding.apply {
             ivCategoryImage.setImageResource(category.image)
             tvCategoryTitle.text = category.title
+        }
+
+    //    On click any category icon start category fragment
+        holder.itemView.setOnClickListener {
+            onCategoryIconClicked(category)
         }
     }
 }

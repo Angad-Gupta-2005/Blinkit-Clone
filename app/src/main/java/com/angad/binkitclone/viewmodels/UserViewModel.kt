@@ -22,7 +22,7 @@ class UserViewModel: ViewModel() {
         //    For fetching the product we create a event listener
         val eventListener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                //    Creating a list for storing the product details that fetch from the firebase
+            //    Creating a list for storing the product details that fetch from the firebase
                 val products = ArrayList<Product>()
 
                 for (product in snapshot.children){
@@ -40,6 +40,34 @@ class UserViewModel: ViewModel() {
         db.addValueEventListener(eventListener)
 
         //    After complete the fetching stop the fetching
+        awaitClose{db.removeEventListener(eventListener)}
+    }
+
+//    Function that fetch categoryWise product
+    fun getCategoryProduct(category: String): Flow<List<Product>> = callbackFlow {
+        val db = FirebaseDatabase.getInstance("https://blinkit-clone-f610a-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("Admins")
+            .child("ProductCategory/${category}")
+
+        val eventListener = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+            //    Creating a list for storing the product details that fetch from the firebase
+                val products = ArrayList<Product>()
+
+                for (product in snapshot.children){
+                    val prod = product.getValue(Product::class.java)
+                    products.add(prod!!)
+                }
+                trySend(products)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        db.addValueEventListener(eventListener)
+    //    After complete the fetching stop the fetching
         awaitClose{db.removeEventListener(eventListener)}
     }
 }
