@@ -13,8 +13,12 @@ import com.angad.binkitclone.databinding.ItemViewProductBinding
 import com.angad.binkitclone.models.Product
 import com.denzcoskun.imageslider.models.SlideModel
 
-class AdapterProduct
-    : RecyclerView.Adapter<AdapterProduct.ProductViewHolder>(), Filterable {
+class AdapterProduct(
+    val onAddButtonClicked: (Product, ItemViewProductBinding) -> Unit,
+    val onIncrementButtonClicked: (Product, ItemViewProductBinding) -> Unit,
+    val onDecrementButtonClicked: (Product, ItemViewProductBinding) -> Unit
+) :
+    RecyclerView.Adapter<AdapterProduct.ProductViewHolder>(), Filterable {
 
     class ProductViewHolder(val binding: ItemViewProductBinding):RecyclerView.ViewHolder(binding.root)
 
@@ -60,6 +64,19 @@ class AdapterProduct
             val quantity = product.productQuantity.toString() + product.productUnit
             tvProductQuantity.text = quantity
             tvProductPrice.text = "₹" + product.productPrice.toString()
+
+            //    Perform functionality on click add button
+            tvAdd.setOnClickListener {
+                onAddButtonClicked(product, this)
+            }
+            //    Perform functionality on click + button
+            tvIncrementCount.setOnClickListener {
+                onIncrementButtonClicked(product, this)
+            }
+            //    Perform functionality on click - button
+            tvDecrementCount.setOnClickListener {
+                onDecrementButtonClicked(product, this)
+            }
         }
 
     }

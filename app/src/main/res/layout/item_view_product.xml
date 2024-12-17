@@ -116,7 +116,7 @@
                             android:textSize="20sp"/>
 
                         <TextView
-                            android:id="@+id/tvProduction"
+                            android:id="@+id/tvProductCount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

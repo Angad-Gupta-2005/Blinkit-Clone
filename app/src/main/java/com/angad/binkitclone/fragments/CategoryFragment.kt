@@ -1,5 +1,7 @@
 package com.angad.binkitclone.fragments
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,9 +10,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.angad.binkitclone.CartListener
 import com.angad.binkitclone.R
 import com.angad.binkitclone.adapters.AdapterProduct
 import com.angad.binkitclone.databinding.FragmentCategoryBinding
+import com.angad.binkitclone.databinding.ItemViewProductBinding
+import com.angad.binkitclone.models.Product
 import com.angad.binkitclone.viewmodels.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -21,6 +26,9 @@ class CategoryFragment : Fragment() {
     private var category: String? = null
 
     private lateinit var adapterProduct: AdapterProduct
+
+//    Creating an object of Interface CartListener
+    private var cartListener: CartListener? = null
 
 //    Initialised the view model
     private val viewModel: UserViewModel by viewModels()
@@ -83,8 +91,12 @@ class CategoryFragment : Fragment() {
                     binding.tvText.visibility = View.GONE
                 }
 
-            //    Creating an object of adapter class
-                adapterProduct = AdapterProduct()
+            //    Creating an object of adapter class and passing the function as a argument
+                adapterProduct = AdapterProduct(
+                    ::onAddButtonClicked,
+                    ::onIncrementButtonClicked,
+                    ::onDecrementButtonClicked
+                )
 
             //    Set the adapter to the recyclerview
                 binding.rvProducts.adapter = adapterProduct
@@ -108,4 +120,56 @@ class CategoryFragment : Fragment() {
         category = bundle?.getString("category")
     }
 
+//    Function that perform functionality to hide the add button and show the product count button
+    private fun onAddButtonClicked(product: Product, productBinding: ItemViewProductBinding){
+        productBinding.tvAdd.visibility = View.GONE
+        productBinding.llProductCount.visibility = View.VISIBLE
+
+    //    Step 1:
+        var itemCount = productBinding.tvProductCount.text.toString().toInt()
+        itemCount++
+        productBinding.tvProductCount.text = itemCount.toString()
+
+        cartListener?.showCartLayout(1)
+
+    //    Step 2:
+    
+    }
+
+//    Function that perform functionality on increment button clicked
+    private fun onIncrementButtonClicked(product: Product, productBinding: ItemViewProductBinding){
+    //    Step 1:
+        var itemCountInc = productBinding.tvProductCount.text.toString().toInt()
+        itemCountInc++
+        productBinding.tvProductCount.text = itemCountInc.toString()
+
+        cartListener?.showCartLayout(1)
+    }
+
+//    Function that perform functionality on decrement button clicked i.e., -
+    @SuppressLint("SetTextI18n")
+    private fun onDecrementButtonClicked(product: Product, productBinding: ItemViewProductBinding){
+    //    Step 1:
+        var itemCountDec = productBinding.tvProductCount.text.toString().toInt()
+        itemCountDec--
+        if (itemCountDec>0){
+            productBinding.tvProductCount.text = itemCountDec.toString()
+        } else {
+            productBinding.tvAdd.visibility = View.VISIBLE
+            productBinding.llProductCount.visibility = View.GONE
+            productBinding.tvProductCount.text = "0"
+        }
+
+        cartListener?.showCartLayout(-1)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is CartListener){
+            cartListener = context
+        }
+        else{
+            throw ClassCastException("Please implement cart listener")
+        }
+    }
 }
