@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -11,11 +12,15 @@ import androidx.core.view.WindowInsetsCompat
 import com.angad.binkitclone.CartListener
 import com.angad.binkitclone.R
 import com.angad.binkitclone.databinding.ActivityUsersMainBinding
+import com.angad.binkitclone.viewmodels.UserViewModel
 
 class UsersMainActivity : AppCompatActivity(), CartListener {
 
 //    Creating an instance of binding
     private lateinit var binding: ActivityUsersMainBinding
+
+//    Initialised the view model
+    private val viewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +35,9 @@ class UsersMainActivity : AppCompatActivity(), CartListener {
         }
     //    Calling the function that set status bar color
         setStatusBarColor()
+
+    //    Function that set the total item in the cart from sharedPreferences
+        getTotalItemCountInCart()
     }
 //     Function that perform functionality to set status bar color
     private fun setStatusBarColor() {
@@ -50,6 +58,24 @@ class UsersMainActivity : AppCompatActivity(), CartListener {
         } else {
             binding.llCart.visibility = View.GONE
             binding.tvNumberOfProductCount.text = "0"
+        }
+    }
+
+//    Function that save the itemCount in the sharePreferences
+    override fun savingCartItemCount(itemCount: Int) {
+        viewModel.fetchTotalCartItemCount().observe(this){
+            viewModel.savingCartItemCount( it + itemCount)
+        }
+    }
+
+    private fun getTotalItemCountInCart() {
+        viewModel.fetchTotalCartItemCount().observe(this){
+             if (it > 0){
+                 binding.llCart.visibility = View.VISIBLE
+                 binding.tvNumberOfProductCount.text = it.toString()
+             } else {
+                 binding.llCart.visibility = View.GONE
+             }
         }
     }
 }

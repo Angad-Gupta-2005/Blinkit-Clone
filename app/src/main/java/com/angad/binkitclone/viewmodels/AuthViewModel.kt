@@ -66,6 +66,7 @@ class AuthViewModel: ViewModel() {
         val credential = PhoneAuthProvider.getCredential(_verificationId.value.toString(), otp)
         Utils.getAuthInstance().signInWithCredential(credential)
             .addOnCompleteListener { task ->
+                user.uid = Utils.getCurrentUserId()
                 if (task.isSuccessful) {
                 //    Save the user data into the firebase realtime database
                     FirebaseDatabase.getInstance("https://blinkit-clone-f610a-default-rtdb.asia-southeast1.firebasedatabase.app").getReference("AllUsers").child("Users").child(user.uid!!).setValue(user)

@@ -126,7 +126,8 @@ class SearchFragment : Fragment() {
         cartListener?.showCartLayout(1)
 
         //    Step 2:
-
+    //    Calling the function that save the itemCount in sharedPreferences
+        cartListener?.savingCartItemCount(1)
     }
 
     //    Function that perform functionality on increment button clicked
@@ -137,6 +138,9 @@ class SearchFragment : Fragment() {
         productBinding.tvProductCount.text = itemCountInc.toString()
 
         cartListener?.showCartLayout(1)
+
+        //    Calling the function that save the itemCount in sharedPreferences
+        cartListener?.savingCartItemCount(1)
     }
 
     //    Function that perform functionality on decrement button clicked i.e., -
@@ -154,6 +158,9 @@ class SearchFragment : Fragment() {
         }
 
         cartListener?.showCartLayout(-1)
+
+        //    Calling the function that save the itemCount in sharedPreferences
+        cartListener?.savingCartItemCount(-1)
     }
 
     override fun onAttach(context: Context) {

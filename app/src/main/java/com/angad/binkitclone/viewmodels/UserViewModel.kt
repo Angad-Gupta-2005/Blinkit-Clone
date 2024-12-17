@@ -1,6 +1,10 @@
 package com.angad.binkitclone.viewmodels
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import com.angad.binkitclone.models.Product
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -10,7 +14,10 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-class UserViewModel: ViewModel() {
+class UserViewModel(application: Application): AndroidViewModel(application) {
+
+//    Creating an instance of sharedPreferences
+    private val sharedPreferences: SharedPreferences = application.getSharedPreferences("My_Pref", MODE_PRIVATE)
 
     //    Function that fetch all the product details from firebase
     fun fetchAllTheProducts(): Flow<List<Product>> = callbackFlow {
@@ -70,4 +77,17 @@ class UserViewModel: ViewModel() {
     //    After complete the fetching stop the fetching
         awaitClose{db.removeEventListener(eventListener)}
     }
+
+//    Function that save the cart item count in the sharedPreferences
+    fun savingCartItemCount(itemCount: Int){
+        sharedPreferences.edit().putInt("itemCount", itemCount).apply()
+    }
+
+//    Function that access the current itemCount from the sharePreferences
+    fun fetchTotalCartItemCount(): MutableLiveData<Int> {
+        val totalItemCount = MutableLiveData<Int>()
+        totalItemCount.value = sharedPreferences.getInt("itemCount", 0)
+        return totalItemCount
+    }
+
 }

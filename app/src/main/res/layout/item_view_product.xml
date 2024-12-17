@@ -50,7 +50,7 @@
                 android:id="@+id/tvProductQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="_500ml"
+                android:text="@string/_500ml"
                 android:textColor="#6F6F6F"
                 android:textSize="16sp"/>
 
@@ -67,7 +67,7 @@
                         android:id="@+id/tvProductPrice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$25"
+                        android:text="@string/_25"
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:gravity="center"
@@ -80,7 +80,7 @@
                         android:id="@+id/tvAdd"
                         android:layout_width="78dp"
                         android:layout_height="wrap_content"
-                        android:text="Add"
+                        android:text="@string/add"
                         android:textStyle="bold"
                         android:padding="5dp"
                         android:gravity="center"
@@ -111,7 +111,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="-"
+                            android:text="@string/minus"
                             android:textColor="#FFFFFF"
                             android:textSize="20sp"/>
 
@@ -121,7 +121,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="0"
+                            android:text="@string/_0"
                             android:textColor="#FFFFFF"
                             android:textSize="20sp"/>
 
@@ -131,7 +131,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="+"
+                            android:text="@string/addSign"
                             android:textColor="#FFFFFF"
                             android:textSize="20sp"/>
 
