@@ -2,6 +2,7 @@ package com.angad.binkitclone.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -65,6 +66,11 @@ class AdapterProduct(
             tvProductQuantity.text = quantity
             tvProductPrice.text = "₹" + product.productPrice.toString()
 
+            if (product.itemCount!! > 0){
+                tvProductCount.text = product.itemCount.toString()
+                tvAdd.visibility = View.GONE
+                llProductCount.visibility = View.VISIBLE
+            }
             //    Perform functionality on click add button
             tvAdd.setOnClickListener {
                 onAddButtonClicked(product, this)

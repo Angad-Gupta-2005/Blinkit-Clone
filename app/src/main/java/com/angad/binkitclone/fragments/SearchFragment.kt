@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -18,6 +19,7 @@ import com.angad.binkitclone.adapters.AdapterProduct
 import com.angad.binkitclone.databinding.FragmentSearchBinding
 import com.angad.binkitclone.databinding.ItemViewProductBinding
 import com.angad.binkitclone.models.Product
+import com.angad.binkitclone.roomdb.CartProducts
 import com.angad.binkitclone.viewmodels.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -126,8 +128,16 @@ class SearchFragment : Fragment() {
         cartListener?.showCartLayout(1)
 
         //    Step 2:
-    //    Calling the function that save the itemCount in sharedPreferences
-        cartListener?.savingCartItemCount(1)
+        product.itemCount = itemCount
+        //    Calling the function that save the itemCount in sharedPreferences
+        lifecycleScope.launch {
+            cartListener?.savingCartItemCount(1)
+            saveProductInRoomDb(product)
+
+            //    Calling the function that update the itemCount on firebase
+            viewModel.updateItemCount(product, itemCount)
+        }
+
     }
 
     //    Function that perform functionality on increment button clicked
@@ -135,12 +145,27 @@ class SearchFragment : Fragment() {
         //    Step 1:
         var itemCountInc = productBinding.tvProductCount.text.toString().toInt()
         itemCountInc++
-        productBinding.tvProductCount.text = itemCountInc.toString()
 
-        cartListener?.showCartLayout(1)
+        //    ItemCount is less than stock of product always
+        if (product.productStock!! + 1 > itemCountInc){
+            productBinding.tvProductCount.text = itemCountInc.toString()
 
-        //    Calling the function that save the itemCount in sharedPreferences
-        cartListener?.savingCartItemCount(1)
+            cartListener?.showCartLayout(1)
+
+            //    Step 2:
+            product.itemCount = itemCountInc
+            //    Calling the function that save the itemCount in sharedPreferences
+            lifecycleScope.launch {
+                cartListener?.savingCartItemCount(1)
+                saveProductInRoomDb(product)
+                //    Calling the function that update the itemCount on firebase
+                viewModel.updateItemCount(product, itemCountInc)
+            }
+        }
+        else{
+            Toast.makeText(requireContext(), "Can't add more item of this product", Toast.LENGTH_SHORT).show()
+        }
+
     }
 
     //    Function that perform functionality on decrement button clicked i.e., -
@@ -149,9 +174,23 @@ class SearchFragment : Fragment() {
         //    Step 1:
         var itemCountDec = productBinding.tvProductCount.text.toString().toInt()
         itemCountDec--
+
+        //    Step 2:
+        product.itemCount = itemCountDec
+        //    Calling the function that save the itemCount in sharedPreferences
+        lifecycleScope.launch {
+            cartListener?.savingCartItemCount(-1)
+            saveProductInRoomDb(product)
+            //    Calling the function that update the itemCount on firebase
+            viewModel.updateItemCount(product, itemCountDec)
+        }
+
         if (itemCountDec>0){
             productBinding.tvProductCount.text = itemCountDec.toString()
         } else {
+            lifecycleScope.launch {
+                viewModel.deleteCartProduct(product.productRandomId!!)
+            }
             productBinding.tvAdd.visibility = View.VISIBLE
             productBinding.llProductCount.visibility = View.GONE
             productBinding.tvProductCount.text = "0"
@@ -159,8 +198,26 @@ class SearchFragment : Fragment() {
 
         cartListener?.showCartLayout(-1)
 
-        //    Calling the function that save the itemCount in sharedPreferences
-        cartListener?.savingCartItemCount(-1)
+    }
+
+    //    Function that save the data in room database
+    private fun saveProductInRoomDb(product: Product) {
+        //    Creating an instance of data class of room database i.e., CartProducts
+        val cartProduct = CartProducts(
+            productId = product.productRandomId!!,
+            productTitle = product.productTitle,
+            productQuantity = product.productQuantity.toString() + product.productUnit.toString(),
+            productPrice = "₹$product.productPrice",
+            productCount = product.itemCount,
+            productStock = product.productStock,
+            productImage = product.productImageUris?.get(0)!!,
+            productCategory = product.productCategory,
+            adminUid = product.adminUid
+        )
+
+        lifecycleScope.launch {
+            viewModel.insertCartProduct(cartProduct)
+        }
     }
 
     override fun onAttach(context: Context) {

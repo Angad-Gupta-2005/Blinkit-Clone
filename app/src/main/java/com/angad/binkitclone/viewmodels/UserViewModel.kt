@@ -4,8 +4,12 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.angad.binkitclone.models.Product
+import com.angad.binkitclone.roomdb.CartProductDao
+import com.angad.binkitclone.roomdb.CartProducts
+import com.angad.binkitclone.roomdb.CartProductsDatabase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -18,6 +22,30 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
 
 //    Creating an instance of sharedPreferences
     private val sharedPreferences: SharedPreferences = application.getSharedPreferences("My_Pref", MODE_PRIVATE)
+
+//    Initialised the room database
+    val cartProductDao: CartProductDao? = CartProductsDatabase.getDatabaseInstance(application)?.cartProductsDao()
+
+//    RoomDB
+    //  For inserting the data in room database
+    suspend fun insertCartProduct(products: CartProducts){
+        cartProductDao?.insertCartProduct(products)
+    }
+
+    fun getAll(): LiveData<List<CartProducts>>{
+        return cartProductDao!!.getAllCartProducts()
+    }
+
+    //  For updating the data in room database
+    suspend fun updateCartProduct(products: CartProducts){
+        cartProductDao?.updateCartProduct(products)
+    }
+
+    //  For delete the data in room
+    suspend fun deleteCartProduct(productId: String){
+        cartProductDao?.deleteCartProduct(productId)
+    }
+
 
     //    Function that fetch all the product details from firebase
     fun fetchAllTheProducts(): Flow<List<Product>> = callbackFlow {
@@ -50,7 +78,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         awaitClose{db.removeEventListener(eventListener)}
     }
 
-//    Function that fetch categoryWise product
+//    Function that fetch categoryWise product from firebase
     fun getCategoryProduct(category: String): Flow<List<Product>> = callbackFlow {
         val db = FirebaseDatabase.getInstance("https://blinkit-clone-f610a-default-rtdb.asia-southeast1.firebasedatabase.app")
             .getReference("Admins")
@@ -76,6 +104,25 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         db.addValueEventListener(eventListener)
     //    After complete the fetching stop the fetching
         awaitClose{db.removeEventListener(eventListener)}
+    }
+
+//    Function that update the itemCount in the firebase
+    fun updateItemCount(product: Product, itemCount: Int){
+    //    Creating a node for adding all product
+        FirebaseDatabase.getInstance("https://blinkit-clone-f610a-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("Admins")
+            .child("AllProducts/${product.productRandomId}").child("itemCount").setValue(itemCount)
+
+    //    Creating a node for adding ProductCategory
+        FirebaseDatabase.getInstance("https://blinkit-clone-f610a-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("Admins")
+            .child("ProductCategory/${product.productCategory}/${product.productRandomId}").child("itemCount").setValue(itemCount)
+
+    //    Creating a node for adding ProductType
+        FirebaseDatabase.getInstance("https://blinkit-clone-f610a-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .getReference("Admins")
+            .child("ProductType/${product.productType}/${product.productRandomId}").child("itemCount").setValue(itemCount)
+
     }
 
 //    Function that save the cart item count in the sharedPreferences
