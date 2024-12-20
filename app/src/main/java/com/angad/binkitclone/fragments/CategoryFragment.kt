@@ -214,7 +214,7 @@ class CategoryFragment : Fragment() {
             productId = product.productRandomId!!,
             productTitle = product.productTitle,
             productQuantity = product.productQuantity.toString() + product.productUnit.toString(),
-            productPrice = "₹$product.productPrice",
+            productPrice = "₹" + "${product.productPrice}",
             productCount = product.itemCount,
             productStock = product.productStock,
             productImage = product.productImageUris?.get(0)!!,

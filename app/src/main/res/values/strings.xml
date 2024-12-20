@@ -27,4 +27,12 @@
     <string name="minus">-</string>
     <string name="_0">0</string>
     <string name="addSign">+</string>
+    <string name="product_image">Product Image</string>
+    <string name="nandini_milk">Nandini Milk</string>
+    <string name="_40g">40g</string>
+    <string name="_50">₹50</string>
+    <string name="item">ITEM</string>
+    <string name="up_button">Up button</string>
+    <string name="next">Next</string>
+    <string name="right_button">Right Button</string>
 </resources>
