@@ -1,6 +1,7 @@
 package com.angad.binkitclone.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,6 +31,7 @@ class UsersMainActivity : AppCompatActivity(), CartListener {
 
     private lateinit var cartProductList: List<CartProducts>
     private lateinit var adapterCartProducts:AdapterCartProducts
+    private lateinit var bsCartProductsBinding: BsCartProductsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,45 +47,22 @@ class UsersMainActivity : AppCompatActivity(), CartListener {
     //    Calling the function that set status bar color
         setStatusBarColor()
 
+    //    Calling the function that perform the functionality to store the add to cart product
         getAllCartProducts()
     //    Function that set the total item in the cart from sharedPreferences
         getTotalItemCountInCart()
 
+    //    Calling the function that show add to cart product
         onCartClick()
+
+    //    Calling the function that perform the functionality to go on the order place activity
+        onNextButtonClicked()
     }
 
-
-    private fun getAllCartProducts(){
-        viewModel.getAll().observe(this){
-            for (i in it){
-            //    Initialised and storing the cartProductList
-                cartProductList = it
-
-            }
-        }
-    }
-
-    private fun onCartClick() {
-        binding.llItemCart.setOnClickListener {
-            val bsCartProductsBinding = BsCartProductsBinding.inflate(LayoutInflater.from(this))
-
-        //    Creating an object of bottom sheet
-            val bs = BottomSheetDialog(this)
-        //    Passing the view to the bottom sheet
-            bs.setContentView(bsCartProductsBinding.root)
-
-        //    Passing the number of item in the cart
-            bsCartProductsBinding.tvNumberOfProductCount.text = binding.tvNumberOfProductCount.text
-
-        //    Initialised the adapter
-            adapterCartProducts = AdapterCartProducts()
-        //    Initialised the recycler view
-            bsCartProductsBinding.rvProductsItems.adapter = adapterCartProducts
-        //    Passing the list of data to the adapter
-            adapterCartProducts.differ.submitList(cartProductList)
-
-        //    for showing the bottom sheet
-            bs.show()
+    private fun onNextButtonClicked() {
+        binding.btnNext.setOnClickListener {
+            startActivity(Intent(this, OrderPlaceActivity::class.java))
+            Log.d("TAG", "onNextButtonClicked: CLicked")
         }
     }
 
@@ -126,4 +105,51 @@ class UsersMainActivity : AppCompatActivity(), CartListener {
              }
         }
     }
+
+//    Function that show the add to cart product using bottom sheet navigation
+    private fun onCartClick() {
+        binding.llItemCart.setOnClickListener {
+            bsCartProductsBinding = BsCartProductsBinding.inflate(LayoutInflater.from(this))
+
+        //    Creating an object of bottom sheet
+            val bs = BottomSheetDialog(this)
+        //    Passing the view to the bottom sheet
+            bs.setContentView(bsCartProductsBinding.root)
+
+        //    Passing the number of item in the cart
+            bsCartProductsBinding.tvNumberOfProductCount.text = binding.tvNumberOfProductCount.text
+
+        //    On click the next button go to the OrderPlace Activity
+            bsCartProductsBinding.btnNext.setOnClickListener {
+                startActivity(Intent(this, OrderPlaceActivity::class.java))
+            }
+
+        //    Close the bottom sheet when user click second item on itemCart
+            bsCartProductsBinding.llItemCart.setOnClickListener {
+                bs.hide()
+            }
+
+        //    Initialised the adapter
+            adapterCartProducts = AdapterCartProducts()
+        //    Initialised the recycler view
+            bsCartProductsBinding.rvProductsItems.adapter = adapterCartProducts
+        //    Passing the list of data to the adapter
+            adapterCartProducts.differ.submitList(cartProductList)
+
+        //    for showing the bottom sheet
+            bs.show()
+        }
+    }
+
+//    Function that store add to cart product details
+    private fun getAllCartProducts(){
+        viewModel.getAll().observe(this){
+            for (i in it){
+                //    Initialised and storing the cartProductList
+                cartProductList = it
+
+            }
+        }
+    }
+
 }
