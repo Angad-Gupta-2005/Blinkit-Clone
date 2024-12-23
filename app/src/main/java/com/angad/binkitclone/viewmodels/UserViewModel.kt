@@ -7,6 +7,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.angad.binkitclone.models.Product
+import com.angad.binkitclone.models.Users
+import com.angad.binkitclone.objects.Utils
 import com.angad.binkitclone.roomdb.CartProductDao
 import com.angad.binkitclone.roomdb.CartProducts
 import com.angad.binkitclone.roomdb.CartProductsDatabase
@@ -24,7 +26,7 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
     private val sharedPreferences: SharedPreferences = application.getSharedPreferences("My_Pref", MODE_PRIVATE)
 
 //    Initialised the room database
-    val cartProductDao: CartProductDao? = CartProductsDatabase.getDatabaseInstance(application)?.cartProductsDao()
+    private val cartProductDao: CartProductDao? = CartProductsDatabase.getDatabaseInstance(application)?.cartProductsDao()
 
 //    RoomDB
     //  For inserting the data in room database
@@ -137,4 +139,25 @@ class UserViewModel(application: Application): AndroidViewModel(application) {
         return totalItemCount
     }
 
+//    Function that check user address status i.e., user is first time or not
+    fun getAddressStatus(): MutableLiveData<Boolean>{
+        val status = MutableLiveData<Boolean>()
+        status.value = sharedPreferences.getBoolean("addressStatus", false)
+        return status
+    }
+
+//    Function that save address status
+    fun saveAddressStatus(){
+        sharedPreferences.edit().putBoolean("addressStatus", true).apply()
+    }
+
+//    Function that save the user address in firebase
+    fun saveUserAddress(address: String){
+    //    Save the user data into the firebase realtime database
+    FirebaseDatabase.getInstance("https://blinkit-clone-f610a-default-rtdb.asia-southeast1.firebasedatabase.app")
+        .getReference("AllUsers")
+        .child("Users")
+        .child(Utils.getCurrentUserId().toString())
+        .child("userAddress").setValue(address)
+    }
 }

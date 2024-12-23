@@ -138,7 +138,7 @@ class OTPFragment : Fragment() {
 //    function to verify the otp entered by the user and after verification it goes to the home fragment
     private fun verifyOtp(otp: String) {
     //    Creating an instance of user class which available in models package
-        val user = Users( Utils.getCurrentUserId(), userNumber, null)
+        val user = Users( uid = null, userPhoneNumber = userNumber,  userAddress = " ")
 
         viewModel.signInWithPhoneAuthCredential(otp, userNumber, user)
 

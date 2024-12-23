@@ -2,14 +2,22 @@ package com.angad.binkitclone.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.angad.binkitclone.adapters.AdapterCartProducts
 import com.angad.binkitclone.databinding.ActivityOrderPlaceBinding
+import com.angad.binkitclone.databinding.AddressLayoutBinding
+import com.angad.binkitclone.models.Users
+import com.angad.binkitclone.objects.Utils
 import com.angad.binkitclone.viewmodels.UserViewModel
+import kotlinx.coroutines.launch
 
 class OrderPlaceActivity : AppCompatActivity() {
 
@@ -37,6 +45,62 @@ class OrderPlaceActivity : AppCompatActivity() {
         onBackButtonClicked()
 
         getAllCartProducts()
+
+    //    On place order click functionality
+        onPlaceOrderClicked()
+    }
+
+    private fun onPlaceOrderClicked() {
+        binding.btnPlaceOrder.setOnClickListener {
+        //    Observe the live data
+            viewModel.getAddressStatus().observe(this){ status ->
+                if (status){
+                //    Payment work
+                    Toast.makeText(this, "Place Order button Clicked", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    val addressLayoutBinding = AddressLayoutBinding.inflate(LayoutInflater.from(this))
+
+                //    Creating an object of alert dialog
+                    val alertDialog = AlertDialog.Builder(this)
+                        .setView(addressLayoutBinding.root)
+                        .create()
+                //    Show the alert dialog
+                    alertDialog.show()
+
+                //    Calling the function that save the address of user in firebase on click add button
+                    addressLayoutBinding.btnAdd.setOnClickListener {
+                        saveAddress(alertDialog, addressLayoutBinding)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun saveAddress(alertDialog: AlertDialog, addressLayoutBinding: AddressLayoutBinding) {
+        Utils.showDialog(this, "Processing...")
+
+    //    Accessing the all filed value
+        val userPinCode = addressLayoutBinding.etPinCode.text.toString()
+        val userPhoneNumber = addressLayoutBinding.etPhoneNumber.text.toString()
+        val userState = addressLayoutBinding.etState.text.toString()
+        val userDistrict = addressLayoutBinding.etDistrict.text.toString()
+        val userAddress = addressLayoutBinding.etDescriptiveAddress.text.toString()
+
+    //    Concatenate the address
+        val address = "$userPinCode, $userDistrict( $userState ), $userAddress, $userPhoneNumber"
+
+
+    //    Saving the address
+        lifecycleScope.launch {
+            viewModel.saveUserAddress(address)
+            viewModel.saveAddressStatus()
+        }
+
+    //    After saving the address hide the alertDialog and loader
+        alertDialog.dismiss()
+        Toast.makeText(this, "Address saved", Toast.LENGTH_SHORT).show()
+        Utils.hideDialog()
     }
 
     private fun onBackButtonClicked() {
